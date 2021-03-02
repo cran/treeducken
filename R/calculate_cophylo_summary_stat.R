@@ -1,8 +1,14 @@
 #' @describeIn cophy_summary_stat Calculates the summary statistics for one index of the list of cophylogenetic objects
 #'
-#' @return A vector consisting of (in order) cospeciations, host speciations, host extinctions, symbiont speciations, symbiont extinctions, parafit statistic, and parafit p-value
+#' @return A vector consisting of (in order) cospeciations, host speciations, host extinctions, symbiont speciations, symbiont extinctions, host spread/switch speciations, symbiont dispersals, symbiont extirpations, parafit statistic, and parafit p-value
 #' @export
 cophy_summary_stat_by_indx <- function(cophy_obj, cophy_obj_indx){
+  warning("please use summarize_1cophy() instead of cophy_summary_stat_by_indx()")
+  summarize_1cophy(cophy_obj, cophy_obj_indx)
+}
+#' @export
+#' @rdname cophy_summary_stat
+summarize_1cophy <- function(cophy_obj, cophy_obj_indx) {
   if(cophy_obj_indx < 1)
     stop("'cophy_obj_indx' must be greater than 0")
   if(!is.numeric(cophy_obj_indx))
@@ -13,11 +19,14 @@ cophy_summary_stat_by_indx <- function(cophy_obj, cophy_obj_indx){
     event_types <- levels(as.factor(events$Event_Type))
     num_each_event <- tabulate(as.factor(events$Event_Type))
     names(num_each_event) <- event_types
-    cospeciations <- num_each_event["C"]
-    host_speciations <- num_each_event["HG"]
-    host_extinctions <- num_each_event["HL"]
-    symbiont_speciations <- num_each_event["SG"]
-    symbiont_extinctions <- num_each_event["SL"]
+    cospeciations <- num_each_event["CSP"]
+    host_speciations <- num_each_event["HSP"]
+    host_extinctions <- num_each_event["HX"]
+    symbiont_speciations <- num_each_event["SSP"]
+    symbiont_extinctions <- num_each_event["SX"]
+    host_expansions <- num_each_event["SHE"]
+    symb_dispersals <- num_each_event["DISP"]
+    symb_extirpations <- num_each_event["EXTP"]
   }
   else{
     cospeciations <- 0
@@ -25,8 +34,10 @@ cophy_summary_stat_by_indx <- function(cophy_obj, cophy_obj_indx){
     host_extinctions <- 0
     symbiont_speciations <- 0
     symbiont_extinctions <- 0
+    host_expansions <- 0
+    symb_dispersals <- 0
+    symb_extirpations <- 0
   }
-  host_expansions <- NULL # not sure why I don't have a specific tag for this...
   # if(length(cophy_obj[[cophy_obj_indx]]$host_tree$tip.label) < 3 ||
   #    length(cophy_obj[[cophy_obj_indx]]$symb_tree$tip.label) < 3)
   # {
@@ -35,33 +46,35 @@ cophy_summary_stat_by_indx <- function(cophy_obj, cophy_obj_indx){
   # }
   # else
   # {
-    parafits <- treeducken::parafit_stat(cophy_obj[[cophy_obj_indx]]$host_tree,
-                                         cophy_obj[[cophy_obj_indx]]$symb_tree,
-                                         cophy_obj[[cophy_obj_indx]]$association_mat)
-    parafit_test <- treeducken::parafit_test(cophy_obj[[cophy_obj_indx]]$host_tree,
-                                             cophy_obj[[cophy_obj_indx]]$symb_tree,
-                                             cophy_obj[[cophy_obj_indx]]$association_mat,
-                                             parafits)
-    # cophy_eigen <- treeducken::almost_parafit_stat(cophy_obj[[cophy_obj_indx]]$host_tree,
-    #                                   cophy_obj[[cophy_obj_indx]]$symb_tree,
-    #                                   cophy_obj[[cophy_obj_indx]]$association_mat)
- # }
+  parafits <- treeducken::parafit_stat(cophy_obj[[cophy_obj_indx]]$host_tree,
+                                       cophy_obj[[cophy_obj_indx]]$symb_tree,
+                                       cophy_obj[[cophy_obj_indx]]$association_mat)
+  parafit_test <- treeducken::parafit_test(cophy_obj[[cophy_obj_indx]]$host_tree,
+                                           cophy_obj[[cophy_obj_indx]]$symb_tree,
+                                           cophy_obj[[cophy_obj_indx]]$association_mat,
+                                           parafits)
+  # cophy_eigen <- treeducken::almost_parafit_stat(cophy_obj[[cophy_obj_indx]]$host_tree,
+  #                                   cophy_obj[[cophy_obj_indx]]$symb_tree,
+  #                                   cophy_obj[[cophy_obj_indx]]$association_mat)
+  # }
   c(cospeciations,
     host_speciations,
     host_extinctions,
     symbiont_speciations,
     symbiont_extinctions,
-    #host_expansions,
+    host_expansions,
+    symb_dispersals,
+    symb_extirpations,
     parafits,
     parafit_test)
-   # cophy_eigen)
+  # cophy_eigen)
 }
 #' Calculates summary statistics for cophylogenetic objects
 #'
-#' @description For cophylogenetic objects produced in treeducken via `sim_cophylo_bdp`, calculates the numbers of different events of interest. In addition, calculates and tests the ParaFit test.
+#' @description For cophylogenetic objects produced in treeducken via `sim_cophyBD`, calculates the numbers of different events of interest. In addition, calculates and tests the ParaFit test.
 #'
-#' @param cophy_obj The cophylogenetic object produced via `sim_cophylo_bdp`
-#' @param cophy_obj_indx The index with `cophy_obj` for `cophylo_summary_stat_by_indx`
+#' @param cophy_obj The cophylogenetic object produced via `sim_cophyBD`
+#' @param cophy_obj_indx The index with `cophy_obj` for `summarize_1cophy`
 #'
 #' @return A dataframe containing statistics relevant to cophylogenetic analysis
 #' @examples
@@ -74,7 +87,7 @@ cophy_summary_stat_by_indx <- function(cophy_obj, cophy_obj_indx){
 #' host_shift_rate <- 0.0
 #' cosp_rate <- 2.0
 #'
-#' cophy_pair <- sim_cophylo_bdp(hbr = host_lambda,
+#' cophy_pair <- sim_cophyBD(hbr = host_lambda,
 #'                            hdr = host_mu,
 #'                            cosp_rate = cosp_rate,
 #'                            host_exp_rate = host_shift_rate,
@@ -82,40 +95,49 @@ cophy_summary_stat_by_indx <- function(cophy_obj, cophy_obj_indx){
 #'                            sbr = symb_lambda,
 #'                            numbsim = numb_replicates,
 #'                            time_to_sim = time)
-#' summary_stats <- cophy_summary_stat(cophy_pair)
+#' summary_stats <- summarize_cophy(cophy_pair)
 #' @export
 cophy_summary_stat <- function(cophy_obj) {
-    if(class(cophy_obj) != "multiCophy") {
-      if(class(cophy_obj) == "cophy") {
-        mult_cophy_obj <- list(cophy_obj)
-        class(mult_cophy_obj) <- "multiCophylo"
-        stat_df <- data.frame(matrix(0, nrow = 1, ncol = 7))
-        stat_df[1,] <- treeducken::cophy_summary_stat_by_indx(mult_cophy_obj, 1)
-      }
-      else
-        stop("'cophy_obj' must be an object of class 'multiCophylo")
-    }
-    else{
-      num_cophy_obj <- length(cophy_obj)
-      stat_df <- data.frame(matrix(0, nrow = num_cophy_obj, ncol = 7))
-      for(i in 1:num_cophy_obj){
-        stat_df[i,] <- treeducken::cophy_summary_stat_by_indx(cophy_obj, i)
-      }
-    }
-    colnames(stat_df) <- c("Cospeciations",
-                           "Host_Speciations",
-                           "Host_Extinctions",
-                           "Symbiont_Speciations",
-                           "Symbiont_Extinctions",
-                        #   "Host Expansions",
-                            "Parafit_Stat",
-                            "Parafit_P-value")
- ##                           "Cophylo_Eigen")
-    if(!is.null(cophy_obj$event_history)){
-      stat_df[which(is.na(stat_df[, 1:5]), arr.ind = TRUE)] <- 0
-    }
-    stat_df
+  warning("please use summarize_cophy instead of cophy_summary_stat")
+  summarize_cophy(cophy_obj)
 }
+#' @export
+#' @rdname cophy_summary_stat
+summarize_cophy <- function(cophy_obj) {
+  if(class(cophy_obj) != "multiCophy") {
+    if(class(cophy_obj) == "cophy") {
+      mult_cophy_obj <- list(cophy_obj)
+      class(mult_cophy_obj) <- "multiCophy"
+      stat_df <- data.frame(matrix(0, nrow = 1, ncol = 10))
+      stat_df[1,] <- treeducken::summarize_1cophy(mult_cophy_obj, 1)
+    }
+    else
+      stop("'cophy_obj' must be an object of class 'multiCophylo")
+  }
+  else{
+    num_cophy_obj <- length(cophy_obj)
+    stat_df <- data.frame(matrix(0, nrow = num_cophy_obj, ncol = 10))
+    for(i in 1:num_cophy_obj){
+      stat_df[i,] <- treeducken::summarize_1cophy(cophy_obj, i)
+    }
+  }
+  colnames(stat_df) <- c("Cospeciations",
+                         "Host_Speciations",
+                         "Host_Extinctions",
+                         "Symbiont_Speciations",
+                         "Symbiont_Extinctions",
+                         "Host_Spread/Switches",
+                         "Dispersals",
+                         "Extirpations",
+                         "Parafit_Stat",
+                         "Parafit_P-value")
+  ##                           "Cophylo_Eigen")
+  if(!is.null(cophy_obj$event_history)){
+    stat_df[which(is.na(stat_df[, 1:8]), arr.ind = TRUE)] <- 0
+  }
+  stat_df
+}
+
 #' Calculate the ParafitGlobal statistic on 2 trees and their association matrix
 #'
 #' @description Calculate the ParafitGlobal Statistic to be used in the hypothesis test described in Legendre et al. (2002).
@@ -135,7 +157,7 @@ cophy_summary_stat <- function(cophy_obj) {
 #' The value from this is input into the test function. Note that this gives only the raw statistic unlike `ape::parafit`. That is the
 #' only reason it is implemented here in treeducken (similar to `treeducken::cherries`).
 #' @examples
-#' tr_pair <- sim_cophylo_bdp(hbr=0.1,
+#' tr_pair <- sim_cophyBD(hbr=0.1,
 #'                           hdr=0.05,
 #'                           sdr=0.1,
 #'                           host_exp_rate=0.4,
@@ -177,16 +199,16 @@ parafit_stat <- function(host_tr, symb_tr, assoc_mat){
       warning("'symb_tr' must be a tree with more than 2 extant tips to calculate the parafit stat returning NA.")
       return(NA)
     }
-    if(length(host_tree$tip.label) != ncol(assoc_mat))
+    if(length(host_tree$tip.label) != nrow(assoc_mat))
       stop("'assoc_mat' must have the same number of columns as extant tips in 'host_tr'. It does not.")
-    if(length(symb_tree$tip.label) != nrow(assoc_mat))
+    if(length(symb_tree$tip.label) != ncol(assoc_mat))
       stop("'assoc_mat' must have the same number of rows as extant tips in 'symb_tr'. It does not.")
     H <- ape::cophenetic.phylo(host_tree)
     S <- ape::cophenetic.phylo(symb_tree)
     H_pcoas <- ape::pcoa(H)
     S_pcoas <- ape::pcoa(S)
 # remember the weirdness with pca$values corresponding to cospeciations
-    D <- t(H_pcoas$vectors) %*% t(assoc_mat) %*% S_pcoas$vectors
+    D <- t(H_pcoas$vectors) %*% assoc_mat %*% S_pcoas$vectors
     sum(diag(D)^2)
 }
 #' @describeIn parafit_stat Perform ParaFit Hypothesis Test

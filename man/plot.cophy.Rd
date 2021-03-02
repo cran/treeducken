@@ -16,6 +16,7 @@
   gap = 1,
   font = 3,
   fsize = 1,
+  show_div_bar = FALSE,
   ...
 )
 
@@ -42,6 +43,8 @@
 
 \item{fsize}{What size font as a character expansion factor (same as cex)}
 
+\item{show_div_bar}{Shows a bar under both trees with ticks where the divergences are (default: F)}
+
 \item{...}{other plotting parameters}
 }
 \value{
@@ -49,7 +52,7 @@ a plot of the host and symbiont tree with extant interactions
 }
 \description{
 This function plots a host and symbiont tree given the object returned by
-`sim_cophylo_bdp`.
+`sim_cophyBD`.
 }
 \details{
 This function is mostly an altered version of the cophyloplot function
@@ -70,13 +73,14 @@ symb_lambda <- 0.4
 host_shift_rate <- 0.0
 cosp_rate <- 2.0
 
-cophylo_pair <- sim_cophylo_bdp(hbr = host_lambda,
+cophylo_pair <- sim_cophyBD(hbr = host_lambda,
                            hdr = host_mu,
                            cosp_rate = cosp_rate,
                            host_exp_rate = host_shift_rate,
                            sdr = symb_mu,
                            sbr = symb_lambda,
                            numbsim = numb_replicates,
+
                            time_to_sim = time)
 plot.cophy(cophylo_pair[[1]])
 }

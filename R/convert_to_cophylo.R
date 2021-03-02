@@ -41,11 +41,18 @@
 #'                               "lice_bd.tre",
 #'                                package = "treeducken")
 #' lice_tree <- ape::read.nexus(lice_tree_path)
-#' gopher_lice_cophy <- convert_to_cophy(hostTree = gopher_tree,
+#' gopher_lice_cophy <- to_cophy(hostTree = gopher_tree,
 #'                                          symbTree = lice_tree,
 #'                                          assocMat = gopher_lice_assoc_matrix)
 #' @export
 convert_to_cophy <- function(hostTree, symbTree, assocMat, eventHistory = NULL){
+    warning("please use to_cophy instead of convert_to_cophy", call.=FALSE)
+    to_cophy(hostTree, symbTree, assocMat, eventHistory)
+}
+#' @export
+#' @rdname convert_to_cophy
+to_cophy <- function(hostTree, symbTree, assocMat, eventHistory = NULL){
+
     if(!(identical(class(hostTree), "phylo")))
         stop("`hostTree` input is not of class `phylo`")
     if(!(identical(class(symbTree), "phylo")))
@@ -60,14 +67,14 @@ convert_to_cophy <- function(hostTree, symbTree, assocMat, eventHistory = NULL){
     pruned_symb_tree <- treeducken::drop_extinct(symbTree, tol = 0.0001)
     nExtHostTips <- length(pruned_host_tree$tip.label)
     nExtSymbTips <- length(pruned_symb_tree$tip.label)
-    if(nExtHostTips != ncol(assocMat))
+    if(nExtHostTips != nrow(assocMat))
         stop("number of extant tips in 'hostTree' does not match number cols in 'assocMat'")
-    if(nExtSymbTips != nrow(assocMat))
+    if(nExtSymbTips != ncol(assocMat))
         stop("number of extant tips in 'symbTree' does not match number rows in 'assocMat'")
     cophy <- list("host_tree" = hostTree,
-                    "symb_tree" = symbTree,
-                    "association_mat" = assocMat,
-                    "event_history" = eventHistory)
+                  "symb_tree" = symbTree,
+                  "association_mat" = assocMat,
+                  "event_history" = eventHistory)
     class(cophy) <- "cophy"
     cophy
 }

@@ -6,9 +6,9 @@
 
 using namespace Rcpp;
 
-// sim_sptree_bdp
-Rcpp::List sim_sptree_bdp(SEXP sbr, SEXP sdr, SEXP numbsim, Rcpp::NumericVector n_tips, Rcpp::NumericVector gsa_stop_mult);
-RcppExport SEXP _treeducken_sim_sptree_bdp(SEXP sbrSEXP, SEXP sdrSEXP, SEXP numbsimSEXP, SEXP n_tipsSEXP, SEXP gsa_stop_multSEXP) {
+// sim_stBD
+Rcpp::List sim_stBD(SEXP sbr, SEXP sdr, SEXP numbsim, Rcpp::NumericVector n_tips, Rcpp::NumericVector gsa_stop_mult);
+RcppExport SEXP _treeducken_sim_stBD(SEXP sbrSEXP, SEXP sdrSEXP, SEXP numbsimSEXP, SEXP n_tipsSEXP, SEXP gsa_stop_multSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,13 +17,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type numbsim(numbsimSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type n_tips(n_tipsSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type gsa_stop_mult(gsa_stop_multSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_sptree_bdp(sbr, sdr, numbsim, n_tips, gsa_stop_mult));
+    rcpp_result_gen = Rcpp::wrap(sim_stBD(sbr, sdr, numbsim, n_tips, gsa_stop_mult));
     return rcpp_result_gen;
 END_RCPP
 }
-// sim_sptree_bdp_time
-Rcpp::List sim_sptree_bdp_time(SEXP sbr, SEXP sdr, SEXP numbsim, SEXP t);
-RcppExport SEXP _treeducken_sim_sptree_bdp_time(SEXP sbrSEXP, SEXP sdrSEXP, SEXP numbsimSEXP, SEXP tSEXP) {
+// sim_stBD_t
+Rcpp::List sim_stBD_t(SEXP sbr, SEXP sdr, SEXP numbsim, SEXP t);
+RcppExport SEXP _treeducken_sim_stBD_t(SEXP sbrSEXP, SEXP sdrSEXP, SEXP numbsimSEXP, SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,13 +31,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type sdr(sdrSEXP);
     Rcpp::traits::input_parameter< SEXP >::type numbsim(numbsimSEXP);
     Rcpp::traits::input_parameter< SEXP >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_sptree_bdp_time(sbr, sdr, numbsim, t));
+    rcpp_result_gen = Rcpp::wrap(sim_stBD_t(sbr, sdr, numbsim, t));
     return rcpp_result_gen;
 END_RCPP
 }
-// sim_locustree_bdp
-Rcpp::List sim_locustree_bdp(Rcpp::List species_tree, SEXP gbr, SEXP gdr, SEXP lgtr, SEXP num_loci, Rcpp::String transfer_type);
-RcppExport SEXP _treeducken_sim_locustree_bdp(SEXP species_treeSEXP, SEXP gbrSEXP, SEXP gdrSEXP, SEXP lgtrSEXP, SEXP num_lociSEXP, SEXP transfer_typeSEXP) {
+// sim_ltBD
+Rcpp::List sim_ltBD(Rcpp::List species_tree, SEXP gbr, SEXP gdr, SEXP lgtr, SEXP num_loci, Rcpp::String transfer_type);
+RcppExport SEXP _treeducken_sim_ltBD(SEXP species_treeSEXP, SEXP gbrSEXP, SEXP gdrSEXP, SEXP lgtrSEXP, SEXP num_lociSEXP, SEXP transfer_typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -47,13 +47,35 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type lgtr(lgtrSEXP);
     Rcpp::traits::input_parameter< SEXP >::type num_loci(num_lociSEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type transfer_type(transfer_typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_locustree_bdp(species_tree, gbr, gdr, lgtr, num_loci, transfer_type));
+    rcpp_result_gen = Rcpp::wrap(sim_ltBD(species_tree, gbr, gdr, lgtr, num_loci, transfer_type));
     return rcpp_result_gen;
 END_RCPP
 }
-// sim_cophylo_bdp
-Rcpp::List sim_cophylo_bdp(SEXP hbr, SEXP hdr, SEXP sbr, SEXP sdr, SEXP host_exp_rate, SEXP cosp_rate, SEXP time_to_sim, SEXP numbsim);
-RcppExport SEXP _treeducken_sim_cophylo_bdp(SEXP hbrSEXP, SEXP hdrSEXP, SEXP sbrSEXP, SEXP sdrSEXP, SEXP host_exp_rateSEXP, SEXP cosp_rateSEXP, SEXP time_to_simSEXP, SEXP numbsimSEXP) {
+// sim_cophyBD_ana
+Rcpp::List sim_cophyBD_ana(SEXP hbr, SEXP hdr, SEXP sbr, SEXP sdr, SEXP s_disp_r, SEXP s_extp_r, SEXP host_exp_rate, SEXP cosp_rate, SEXP time_to_sim, SEXP numbsim, Rcpp::NumericVector host_limit, Rcpp::LogicalVector hs_mode);
+RcppExport SEXP _treeducken_sim_cophyBD_ana(SEXP hbrSEXP, SEXP hdrSEXP, SEXP sbrSEXP, SEXP sdrSEXP, SEXP s_disp_rSEXP, SEXP s_extp_rSEXP, SEXP host_exp_rateSEXP, SEXP cosp_rateSEXP, SEXP time_to_simSEXP, SEXP numbsimSEXP, SEXP host_limitSEXP, SEXP hs_modeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type hbr(hbrSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type hdr(hdrSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type sbr(sbrSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type sdr(sdrSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type s_disp_r(s_disp_rSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type s_extp_r(s_extp_rSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type host_exp_rate(host_exp_rateSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type cosp_rate(cosp_rateSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type time_to_sim(time_to_simSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type numbsim(numbsimSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type host_limit(host_limitSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type hs_mode(hs_modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_cophyBD_ana(hbr, hdr, sbr, sdr, s_disp_r, s_extp_r, host_exp_rate, cosp_rate, time_to_sim, numbsim, host_limit, hs_mode));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sim_cophyBD
+Rcpp::List sim_cophyBD(SEXP hbr, SEXP hdr, SEXP sbr, SEXP sdr, SEXP host_exp_rate, SEXP cosp_rate, SEXP time_to_sim, SEXP numbsim, Rcpp::NumericVector host_limit, Rcpp::LogicalVector hs_mode);
+RcppExport SEXP _treeducken_sim_cophyBD(SEXP hbrSEXP, SEXP hdrSEXP, SEXP sbrSEXP, SEXP sdrSEXP, SEXP host_exp_rateSEXP, SEXP cosp_rateSEXP, SEXP time_to_simSEXP, SEXP numbsimSEXP, SEXP host_limitSEXP, SEXP hs_modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -65,13 +87,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type cosp_rate(cosp_rateSEXP);
     Rcpp::traits::input_parameter< SEXP >::type time_to_sim(time_to_simSEXP);
     Rcpp::traits::input_parameter< SEXP >::type numbsim(numbsimSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_cophylo_bdp(hbr, hdr, sbr, sdr, host_exp_rate, cosp_rate, time_to_sim, numbsim));
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type host_limit(host_limitSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type hs_mode(hs_modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_cophyBD(hbr, hdr, sbr, sdr, host_exp_rate, cosp_rate, time_to_sim, numbsim, host_limit, hs_mode));
     return rcpp_result_gen;
 END_RCPP
 }
-// sim_multispecies_coal
-Rcpp::List sim_multispecies_coal(SEXP species_tree, SEXP ne, SEXP num_sampled_individuals, SEXP num_genes, Rcpp::LogicalVector rescale, Rcpp::NumericVector mutation_rate, Rcpp::NumericVector generation_time);
-RcppExport SEXP _treeducken_sim_multispecies_coal(SEXP species_treeSEXP, SEXP neSEXP, SEXP num_sampled_individualsSEXP, SEXP num_genesSEXP, SEXP rescaleSEXP, SEXP mutation_rateSEXP, SEXP generation_timeSEXP) {
+// sim_msc
+Rcpp::List sim_msc(SEXP species_tree, SEXP ne, SEXP num_sampled_individuals, SEXP num_genes, Rcpp::LogicalVector rescale, Rcpp::NumericVector mutation_rate, Rcpp::NumericVector generation_time);
+RcppExport SEXP _treeducken_sim_msc(SEXP species_treeSEXP, SEXP neSEXP, SEXP num_sampled_individualsSEXP, SEXP num_genesSEXP, SEXP rescaleSEXP, SEXP mutation_rateSEXP, SEXP generation_timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -82,17 +106,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type rescale(rescaleSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type mutation_rate(mutation_rateSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type generation_time(generation_timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_multispecies_coal(species_tree, ne, num_sampled_individuals, num_genes, rescale, mutation_rate, generation_time));
+    rcpp_result_gen = Rcpp::wrap(sim_msc(species_tree, ne, num_sampled_individuals, num_genes, rescale, mutation_rate, generation_time));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_treeducken_sim_sptree_bdp", (DL_FUNC) &_treeducken_sim_sptree_bdp, 5},
-    {"_treeducken_sim_sptree_bdp_time", (DL_FUNC) &_treeducken_sim_sptree_bdp_time, 4},
-    {"_treeducken_sim_locustree_bdp", (DL_FUNC) &_treeducken_sim_locustree_bdp, 6},
-    {"_treeducken_sim_cophylo_bdp", (DL_FUNC) &_treeducken_sim_cophylo_bdp, 8},
-    {"_treeducken_sim_multispecies_coal", (DL_FUNC) &_treeducken_sim_multispecies_coal, 7},
+    {"_treeducken_sim_stBD", (DL_FUNC) &_treeducken_sim_stBD, 5},
+    {"_treeducken_sim_stBD_t", (DL_FUNC) &_treeducken_sim_stBD_t, 4},
+    {"_treeducken_sim_ltBD", (DL_FUNC) &_treeducken_sim_ltBD, 6},
+    {"_treeducken_sim_cophyBD_ana", (DL_FUNC) &_treeducken_sim_cophyBD_ana, 12},
+    {"_treeducken_sim_cophyBD", (DL_FUNC) &_treeducken_sim_cophyBD, 10},
+    {"_treeducken_sim_msc", (DL_FUNC) &_treeducken_sim_msc, 7},
     {NULL, NULL, 0}
 };
 

@@ -19,10 +19,12 @@ class Simulator
         double      treeScale;
         double      geneBirthRate, geneDeathRate, transferRate;
         double      propTransfer, propDuplicate;
+        double      dispersalRate, extirpationRate;
         unsigned    indPerPop;
         double      popSize;
         double      generationTime;
         bool        printSOUT;
+        bool        host_switch_mode;
         std::vector<std::shared_ptr<SpeciesTree>>   gsaTrees;
         std::shared_ptr<SpeciesTree>    spTree;
         std::shared_ptr<LocusTree>      lociTree;
@@ -58,7 +60,8 @@ class Simulator
                   double geneDeathRate,
                   double transferRate,
                   std::string transferRandomly);
-        // Simulating species and locus tree with proportion of transfer (e.g. hybridization, linkage)
+        // Simulating species and locus tree with proportion of transfer
+        // (e.g. hybridization, linkage)
         //.
         Simulator(unsigned numTaxaToSim,
                   double speciationRate,
@@ -94,7 +97,20 @@ class Simulator
                   double switchingRate,
                   double cospeciationRate,
                   double rho,
-                  int hostLimit);
+                  int hostLimit,
+                  bool hsMode);
+        Simulator(double timeToSimTo,
+                  double hostSpeciationRate,
+                  double hostExtinctionRate,
+                  double symbSpeciationRate,
+                  double symbExtinctionRate,
+                  double symbDispersalRate,
+                  double symbExtirpationRate,
+                  double switchingRate,
+                  double cospeciationRate,
+                  double rho,
+                  int hostLimit,
+                  bool hsMode);
         ~Simulator();
         void    setGSAStop(int g) { gsaStop = g; }
         void    setSpeciesTree(std::shared_ptr<SpeciesTree> st) { spTree = st; }
@@ -104,12 +120,14 @@ class Simulator
         bool    bdsaBDSim();
         bool    bdSimpleSim();
         bool    pairedBDPSim();
+        bool    pairedBDPSimAna();
         bool    coalescentSim();
         bool    simSpeciesTree();
         bool    simSpeciesTreeTime();
         bool    simLocusTree();
         bool    simGeneTree(int j);
         bool    simHostSymbSpeciesTreePair();
+        bool    simHostSymbSpeciesTreePairWithAnagenesis();
         void    initializeSim();
         void    processGSASim();
         void    prepGSATreeForReconstruction();
@@ -126,7 +144,6 @@ class Simulator
         std::shared_ptr<GeneTree>       getGeneTree() {return geneTree; }
         double          getTimeToSim() {return timeToSim; }
         void            setTimeToSim(double tts) {timeToSim = tts; }
-
         NumericMatrix   getSymbiontEdges() { return symbiontTree->getEdges(); }
         NumericMatrix   getSpeciesEdges() { return spTree->getEdges(); }
         NumericMatrix   getLocusEdges() { return lociTree->getEdges(); }
@@ -153,7 +170,7 @@ class Simulator
         double    getLocusTreeRootEdge();
         double    getSymbiontTreeRootEdge();
         double    getGeneTreeRootEdge(int j);
-
+        arma::umat    hostLimitCheck(arma::umat assocMat, int hostLimit);
         arma::umat    getAssociationMatrix() { return assocMat; }
         arma::umat    cophyloEvent(double eventTime, arma::umat assocMat);
         arma::umat    cophyloERMEvent(double eventTime, arma::umat assocMat);
@@ -164,6 +181,14 @@ class Simulator
         void      updateEventVector(int h, int s, int e, double time);
         void    clearEventDFVecs();
         void    initializeEventVector();
+        Rcpp::CharacterVector  getExtantHostNames(std::vector<std::string> hostNames);
+        Rcpp::CharacterVector  getExtantSymbNames(std::vector<std::string> symbNames);
+        // anagenetic functions
+        double    getTimeToAnaEvent(double dispRate, double extRate, arma::umat assocMat);
+        arma::umat symbiontDispersalEvent(int symbInd, arma::umat assocMat);
+        arma::umat symbiontExtirpationEvent(int symbInd, arma::umat assocMat);
+        arma::umat anageneticEvent(double dispersalRate, double extirpationRate, double currTime, arma::umat assocMat);
+
 };
 
 extern Rcpp::List bdsim_species_tree(double sbr,
@@ -191,7 +216,22 @@ extern Rcpp::List sim_host_symb_treepair(double hostbr,
                                          double switchrate,
                                          double cosprate,
                                          double timeToSimTo,
-                                         int numbsim);
+                                         int host_limit,
+                                         int numbsim,
+                                         bool hsMode);
+
+extern Rcpp::List sim_host_symb_treepair_ana(double hostbr,
+                                            double hostdr,
+                                            double symbbr,
+                                            double symbdr,
+                                            double symbdispersal,
+                                            double symbextirpation,
+                                            double switchrate,
+                                            double cosprate,
+                                            double timeToSimTo,
+                                            int host_limit,
+                                            int numbsim,
+                                            bool hsMode);
 
 extern Rcpp::List sim_locus_tree_gene_tree(std::shared_ptr<SpeciesTree> species_tree,
                                            double gbr,

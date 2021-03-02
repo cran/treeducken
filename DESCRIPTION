@@ -1,7 +1,7 @@
 Package: treeducken
 Type: Package
 Title: Nested Phylogenetic Tree Simulator
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: c(person("Wade", "Dismukes", email="wade.dismukes@gmail.com",
                     role=c("aut","cre")),
            person(c("Tracy","A."), "Heath", role=c("aut")),
@@ -33,7 +33,7 @@ Encoding: UTF-8
 Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2020-09-30 15:45:29 UTC; waded
+Packaged: 2021-03-01 22:48:23 UTC; waded
 Author: Wade Dismukes [aut, cre],
   Tracy A. Heath [aut],
   Josh Justison [ctb],
@@ -46,4 +46,4 @@ Author: Wade Dismukes [aut, cre],
   Joseph W. Brown [ctb]
 Maintainer: Wade Dismukes <wade.dismukes@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-10-06 08:10:02 UTC
+Date/Publication: 2021-03-02 05:20:03 UTC

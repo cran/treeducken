@@ -1,9 +1,9 @@
-#' Test for the cophygenetic set object
+#' Test for the cophylogenetic set object
 #' @description Tests if an object is of class `cophy`
 #'
 #' @param cophy an object to test to see if it is of class `cophy`
 #' @details Checks that an object is of class `cophy`. For multicophy checks that
-#' the class is `multiCophylo` and that each element is of class `cophy`.
+#' the class is `multiCophy` and that each element is of class `cophy`.
 #' @return A logical vector
 #' @seealso as.cophy
 #' @examples
@@ -13,7 +13,7 @@
 #' s_lambda <- 1.0
 #' s_mu <- 0.3
 #' s_her <- 0.0
-#' host_symb_sets <- sim_cophylo_bdp(hbr = h_lambda,
+#' host_symb_sets <- sim_cophyBD(hbr = h_lambda,
 #'                                   hdr = h_mu,
 #'                                   sbr = s_lambda,
 #'                                   cosp_rate = c_lambda,

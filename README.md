@@ -30,23 +30,29 @@ s_lambda <- 1.0
 s_mu <- 0.3
 s_her <- 0.0
 
-host_symb_sets <- sim_cophylo_bdp(hbr = h_lambda,
-                hdr = h_mu,
-                sbr = s_lambda,
-                cosp_rate = c_lambda,
-                sdr = s_mu,
-                host_exp_rate = s_her,
-                timeToSimTo = 2.0,
-                numbsim = 10)
+host_symb_sets <- sim_cophyBD(hbr = h_lambda,
+                            hdr = h_mu,
+                            sbr = s_lambda,
+                            cosp_rate = c_lambda,
+                            sdr = s_mu,
+                            host_exp_rate = s_her,
+                            time_to_sim = 2.0,
+                            numbsim = 10)
 ```
 
 
 ## Installation 
 
-For now you may install the development version using the `devtools` package.
+You may install the development version using the `devtools` package.
 
 In R:
 ```
 library(devtools)
-install_github("wadedismukes/rtreeducken")
+install_github("wadedismukes/treeducken")
+```
+You may install the package itself from CRAN:
+
+In R:
+```
+install.packages("treeducken")
 ```
